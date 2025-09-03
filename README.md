@@ -1,8 +1,3 @@
-Got you. The issue is the mismatched fences (` ````markdown ` opened, but closed with ` ``` `), which makes GitHub treat big chunks as plain text—so your `*` show up literally.
-
-Here’s a clean, copy-paste-ready **README.md** with consistent triple backticks and no stray fences:
-
-````markdown
 # Fully Offline RAG Question & Answering System
 
 A minimal Retrieval-Augmented Generation (RAG) app using **Streamlit** (UI), **ChromaDB** (vector store), **Ollama** (LLM + embeddings), and a **CrossEncoder** re-ranker.  
@@ -54,6 +49,7 @@ Upload a PDF → it’s chunked & embedded → you ask a question → we retriev
 git clone https://github.com/usmaniqbalse/faq-rag-chatbot.git
 cd faq-rag-chatbot
 ```
+
 ````
 
 ### 2) Create and activate a virtual environment
@@ -253,3 +249,4 @@ Retrieve up to 10, then re-rank and keep the **top 3**.
 ---
 
 Happy building! Run `streamlit run main.py`, upload a PDF, and start asking grounded questions. ✨
+````
