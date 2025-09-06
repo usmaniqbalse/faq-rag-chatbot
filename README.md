@@ -7,6 +7,10 @@ Upload a PDF → it’s chunked & embedded → you ask a question → we retriev
 
 ---
 
+<img src="assets/chat-1.png" alt="Chatbot 1" />
+<img src="assets/chat-2.png" alt="Chatbot 2" />
+<img src="assets/chat-3.png" alt="Chatbot 3" />
+
 ## Table of Contents
 
 1. [What You’ll Build](#what-youll-build)
