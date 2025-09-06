@@ -19,18 +19,29 @@ def process_document(uploaded_file: UploadedFile) -> List[Document]:
     Returns:
         A list of Document objects containing chunked text from the PDF.
     """
-    # Store uploaded file as a temp file (deleted immediately after load)
-    temp_file = tempfile.NamedTemporaryFile("wb", suffix=".pdf", delete=False)
-    temp_file.write(uploaded_file.read())
+    # 1️⃣ Write uploaded file to a temp file and close it
+    with tempfile.NamedTemporaryFile("wb", suffix=".pdf", delete=False) as tmp:
+        tmp.write(uploaded_file.read())
+        temp_path = tmp.name  # store path before closing
 
-    loader = PyMuPDFLoader(temp_file.name)
-    docs = loader.load()
-    os.unlink(temp_file.name)  # Delete temp file to avoid leakage
+    try:
+        # 2️⃣ Load PDF (PyMuPDFLoader will open/close internally)
+        loader = PyMuPDFLoader(temp_path)
+        docs = loader.load()
 
-    # Conservative chunks to maximize retrieval signal
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=400,
-        chunk_overlap=100,
-        separators=["\n\n", "\n", ".", "?", "!", " ", ""],
-    )
-    return text_splitter.split_documents(docs)
+        # 3️⃣ Split into chunks
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=400,
+            chunk_overlap=100,
+            separators=["\n\n", "\n", ".", "?", "!", " ", ""],
+        )
+        return text_splitter.split_documents(docs)
+
+    finally:
+        # 4️⃣ Ensure temp file is deleted even if an error occurs
+        if os.path.exists(temp_path):
+            try:
+                os.unlink(temp_path)
+            except PermissionError:
+                # If still locked, skip deletion to avoid crash
+                pass
